@@ -7,15 +7,25 @@ import { Departamento } from '../../models/departamento';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
   public departamentos !: Array<Departamento>
-  constructor(private _service: ServiceDepartamentos){}
+  constructor(private _service: ServiceDepartamentos) { }
 
-ngOnInit(): void {
-  this._service.getDepartamentos().subscribe(response => {
-    this.departamentos = response
-  })
-}
+  loadDepartamentos(): void {
+    this._service.getDepartamentos().subscribe(response => {
+      this.departamentos = response
+    })
+  }
 
-  
+  ngOnInit(): void {
+    this.loadDepartamentos();
+  }
+
+  deleteDepartamento(id: number): void {
+    this._service.deleteDepartamento(id.toString()).subscribe(response => {
+      this.loadDepartamentos()
+    })
+  }
+
+
 }

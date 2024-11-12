@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Departamento } from '../../models/departamento';
-// import { ServiceDepartamentos } from '../../services/service.departamento';
+import { ServiceDepartamentos } from '../../services/service.departamento';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create',
@@ -12,16 +13,20 @@ export class CreateComponent {
   @ViewChild("cajanombre") cajaNombre!: ElementRef;
   @ViewChild("cajalocalidad") cajaLocalidad!: ElementRef;
   
-  public departamento !: Departamento;
 
-  constructor(){}
+  constructor(
+    private _service: ServiceDepartamentos,
+    private _router: Router
+  ){}
   
 
-  nuevoDepartamento(): void{
-    let id = this.cajaId.nativeElement.value;
+  insertarDepartamento(): void{
+    let id = parseInt(this.cajaId.nativeElement.value);
     let nombre = this.cajaNombre.nativeElement.value;
     let localidad = this.cajaLocalidad.nativeElement.value;
-    let departamentoNew = new Departamento(id, nombre, localidad);
-    console.log(departamentoNew);
+    let newDepartamento = new Departamento(id, nombre, localidad);
+    this._service.insertDepartamento(newDepartamento).subscribe(response => {
+      this._router.navigate(["/"])
+    })
   }
 }
